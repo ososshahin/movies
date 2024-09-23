@@ -18,7 +18,7 @@ Movie? movie;
       children: [
         Container(
           height: 580.h,
-          color: Color(0xff131313),
+          color: const Color(0xff131313),
           child: Column(
 
             children: [
@@ -49,7 +49,7 @@ Movie? movie;
             ],
           ),
         ),
-        Center(child: Icon(Icons.play_circle_fill, size: 80,color: Colors.white,)),
+        const Center(child: Icon(Icons.play_circle_fill, size: 80,color: Colors.white,)),
   Positioned(top: 120,
       child: MovieWidget( imageHeight: 210,movie: movie,bookMarkIconSize: 100,addIconSize: 18,
        bookMarkIconBottomPadding: 142, bookMarkIconRightPadding: 78,

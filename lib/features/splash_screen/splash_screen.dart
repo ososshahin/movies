@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:movies_app/core/theming/colors.dart';
 import '../../home.dart';
-import '../home_screen/home_screen.dart';
 
 class SplashScreen extends StatelessWidget {
   static const String routeName = '/';

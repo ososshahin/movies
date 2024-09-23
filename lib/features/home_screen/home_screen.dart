@@ -20,29 +20,29 @@ class HomeScreen extends StatelessWidget
 
   @override
   Widget build(BuildContext context) {
- return FutureBuilder(future: ApiManager().getPopularMovies()
+ return FutureBuilder(future: ApiManager.getPopularMovies()
      , builder:  (context, snapshot) {
      if(snapshot.connectionState==ConnectionState.waiting){
-       return Center(child:
+       return const Center(child:
          CircularProgressIndicator(),);
 
      } if(snapshot.hasError){
-       return Center(child: Text('Something went wrong' , style: TextStyle( color: Colors.white),));
+       return const Center(child: Text('Something went wrong' , style: TextStyle( color: Colors.white),));
      }
        return Column(
         children: [
           CarouselSlider.builder(itemCount:3
               , itemBuilder: (context, index, realIndex) => PopularMoviesWidget(
-              snapshot?.data?.PopularMovies![index]
+              snapshot.data?.PopularMovies![index]
               )
              , options:  CarouselOptions(
                  autoPlay: true,
                 height: 330.h,
                 viewportFraction: 1
               )),
-         Newreleaseswidget(),
-          SizedBox( height: 30,),
-         Recommendedmovieswidget()
+         const NewReleasesWidget(),
+          const SizedBox( height: 30,),
+         const RecommendedMoviesWidget()
          ],
        );;
   });

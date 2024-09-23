@@ -1,10 +1,8 @@
-import 'dart:ffi';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:movies_app/api/model/Movie.dart';
-
+import '../features/home_screen/movies_details/movies_details.dart';
 import 'ImportantUrl.dart';
 
 class MovieWidget extends StatelessWidget {
@@ -16,20 +14,37 @@ class MovieWidget extends StatelessWidget {
   double? addIconBottomPadding;
   double? bookMarkIconRightPadding;
   double? addIconRightPadding;
+  final String? title;
+  final String? imageUrl;
+  final String? year;
+  final String? actors;
 
 
-  MovieWidget({this.movie,
+  MovieWidget({super.key,
+    this.movie,
     this.imageHeight,
-    this.bookMarkIconSize,this.addIconSize,
-  this.bookMarkIconBottomPadding,this.bookMarkIconRightPadding,
-  this.addIconBottomPadding,this.addIconRightPadding});
+    this.bookMarkIconSize,
+    this.addIconSize,
+    this.bookMarkIconBottomPadding,
+    this.bookMarkIconRightPadding,
+    this.addIconBottomPadding,
+    this.addIconRightPadding,
+    this.title,
+    this.imageUrl,
+    this.year,
+    this.actors,});
+
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return  Stack(
       children: [
-       CachedNetworkImage(imageUrl:ImportantUrl().BaseImageUrl+movie!.posterPath!,
-       height: imageHeight?.h,) ,
+       InkWell(
+         onTap: (){
+           Navigator.pushNamed(context, MoviesDetails.routeName);
+         },
+         child: CachedNetworkImage(imageUrl:ImportantUrl().BaseImageUrl+movie!.posterPath!,
+         height: imageHeight?.h,),
+       ) ,
         Positioned(
           bottom:bookMarkIconBottomPadding?.h ,
           right: bookMarkIconRightPadding?.w ,
@@ -37,8 +52,8 @@ class MovieWidget extends StatelessWidget {
             opacity: 1,
             child: ImageIcon(
                 size: bookMarkIconSize,
-                color: Color(0xff514F4F),
-                AssetImage(
+                color: const Color(0xff514F4F),
+                const AssetImage(
                   'assets/images/Icon awesome-bookmark.png',
                 )),
           ),
