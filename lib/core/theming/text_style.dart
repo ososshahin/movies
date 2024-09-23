@@ -4,11 +4,11 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:movies_app/core/theming/colors.dart';
 
 class TextStyleApp {
-  static TextStyle styletext(double size, Color color, FontWeight fw) {
+  static TextStyle styleText(double size, Color color, FontWeight fw) {
     return GoogleFonts.poppins(color: color, fontSize: size.sp, fontWeight: fw);
   }
 
-  static TextStyle font32wieght700ColorBlue = TextStyle(
+  static TextStyle font32weight700ColorBlue = TextStyle(
     fontSize: 32.sp,
     fontFamily: 'Poppins-.ttf',
     fontWeight: FontWeight.w700,

@@ -5,25 +5,26 @@ import 'package:movies_app/core/theming/text_style.dart';
 import '../../api/apimanager.dart';
 import '../../common/MovieWidget.dart';
 
-class Newreleaseswidget extends StatelessWidget {
-  const Newreleaseswidget({super.key});
+class NewReleasesWidget extends StatelessWidget {
+  const NewReleasesWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
     return  Container(
       height: 190,
-      padding: EdgeInsets.all(12),
+      padding: const EdgeInsets.all(12),
       color: AppColors.blackWithOpacity,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('New Releases',style: TextStyleApp.font14weight400colorWhite,),
-          SizedBox( height: 10,),
+          Text('New Releases',
+            style: TextStyleApp.font14weight400colorWhite,),
+          const SizedBox( height: 10,),
           Expanded(
-            child: FutureBuilder(future: ApiManager().getNewReleases() , builder: (context, snapshot) {
+            child: FutureBuilder(future: ApiManager.getNewReleases() , builder: (context, snapshot) {
 
               return ListView.separated(
-                separatorBuilder: (context, index) => SizedBox(width: 10,),
+                separatorBuilder: (context, index) => const SizedBox(width: 10,),
                 itemCount: snapshot.data?.movie!.length??0,
                 scrollDirection:Axis.horizontal,
                 itemBuilder:

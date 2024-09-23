@@ -5,25 +5,25 @@ import '../../common/DetailsMovieWidget.dart';
 import '../../core/theming/colors.dart';
 import '../../core/theming/text_style.dart';
 
-class Recommendedmovieswidget extends StatelessWidget {
-  const Recommendedmovieswidget({super.key});
+class RecommendedMoviesWidget extends StatelessWidget {
+  const RecommendedMoviesWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
     return  Container(
-      padding: EdgeInsets.all(12),
+      padding: const EdgeInsets.all(12),
       height: 270,
       color: AppColors.blackWithOpacity,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Text('Recommended' ,style: TextStyleApp.font14weight400colorWhite,),
-          SizedBox( height: 15,),
-          FutureBuilder(future:ApiManager().getRecommended() ,
+          const SizedBox( height: 15,),
+          FutureBuilder(future:ApiManager.getRecommended() ,
             builder:(context, snapshot) {
               return Expanded(
                 child: ListView.separated(itemBuilder:
-                    (context, index) => Detailsmoviewidget(
+                    (context, index) => DetailsMovieWidget(
                   movie: snapshot.data?.movies![index],
                 )
                   , separatorBuilder:  (context, index) => SizedBox( width: 6,)

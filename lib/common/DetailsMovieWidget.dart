@@ -6,14 +6,14 @@ import 'package:movies_app/common/MovieWidget.dart';
 import 'package:movies_app/core/theming/colors.dart';
 import 'package:movies_app/core/theming/text_style.dart';
 
-class Detailsmoviewidget extends StatelessWidget {
-   Detailsmoviewidget({this.movie});
+class DetailsMovieWidget extends StatelessWidget {
+   DetailsMovieWidget({super.key, this.movie});
   Movie? movie;
 
   @override
   Widget build(BuildContext context) {
     return Card(
-      shape: BeveledRectangleBorder(
+      shape: const BeveledRectangleBorder(
         side: BorderSide(
         color: Colors.transparent
         )
@@ -48,9 +48,9 @@ class Detailsmoviewidget extends StatelessWidget {
                 ),
               ],
             ),
-            SizedBox(height: 8,),
+            const SizedBox(height: 8,),
             Text(movie?.title??'', style: TextStyleApp.font10weight400colorWhite,),
-            SizedBox(height: 8,),
+            const SizedBox(height: 8,),
             Text('${movie?.releaseDate?.formatDate()}  ${movie!.adult??false?'R':'G'}',
             textAlign: TextAlign.start,
             style:TextStyleApp.font8weight400colorWhite,)
