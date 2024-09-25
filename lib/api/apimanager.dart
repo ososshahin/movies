@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+import 'package:movies_app/api/model/MoviesDetailsResponse.dart';
+import 'package:movies_app/api/model/MoviesListResponse.dart';
 import 'package:movies_app/api/model/NewReleasesResponse.dart';
 import 'package:movies_app/api/model/PopularMoviesResponse.dart';
 import 'package:movies_app/api/model/RecommendedMoviesResponse.dart';
@@ -11,6 +13,10 @@ class Endpoints {
   static const String newReleases = '3/movie/upcoming';
   static const String recommended = '3/movie/top_rated';
   static const String search = '3/search/movie';
+  static const String moviesList = '3/genre/movie/list';
+  static const String moviesDetails = '3/discover/movie';
+
+
 }
 
 ///////////////////////////////
@@ -18,7 +24,9 @@ class ApiManager {
   static const String BASE_URl = 'api.themoviedb.org';
   static const String Authorization_Key =
       'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI0ZmY5NjQxZTkzMDIyMTEzZGVmYzAyYmM4ZmE5YTFjZCIsIm5iZiI6MTcyNjU5OTg4Ny41MDc0OSwic3ViIjoiNjZlOWQxZjk4MmZmODczZjdkMWVlOGJhIiwic2NvcGVzIjpbImFwaV9yZWFkIl0sInZlcnNpb24iOjF9.Oha5G0MpPKfKbtTrD-XBlva3T3f1CS_Qv4HH86DuVr8'; //mohammed
-  static const String apiKey = 'e355dd58de7cceb8c05964a6d8fe643e'; //donia
+  static const String apiKey = 'e355dd58de7cceb8c05964a6d8fe643e';//donia
+  static const String Authorization_key2 =
+      "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIzMWVkOTU0NjRkZjBkODEyM2MwYTEyMmNmNDM1MmViMyIsIm5iZiI6MTcyNzIwMjc4Mi4wNTIwOTgsInN1YiI6IjY2ZjE3NjYwZGUyZDUyZGZiZDhkMmMyNiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.2Q-pbwi-QEKEGmX4oyABVbSX095JMjIY6NArJDU1FqA' ";//mai
 
   static Future<PopularMoviesResponse> getPopularMovies() async {
     var url = Uri.https(BASE_URl, Endpoints.popular);
@@ -48,6 +56,44 @@ class ApiManager {
     var recommended = RecommendedMoviesResponse.fromJson(json);
     return recommended;
   }
+  static Future<MoviesListResponse> getMoviesList(String Id,String name) async{
+    var params = {
+      "Id":Id,
+      "Name":name
+
+    };
+    try{
+    var url = Uri.https(BASE_URl,Endpoints.moviesList,params);
+    var response =
+        await http.get(url, headers: {'Authorization': Authorization_key2});
+    if(response.statusCode == 200) {
+      var json = jsonDecode(response.body);
+      var moviesList = MoviesListResponse.fromJson(json);
+      return moviesList;
+    }else{ throw Exception('Failed to load movies');
+    }
+    }catch (e) {
+      print('Error in search API: $e');
+      rethrow;
+    }
+  }
+  static Future<MoviesDetails> getMoviesDetails(String genreId) async{
+    try{
+      var url = Uri.https(BASE_URl,Endpoints.moviesDetails,{'Id':genreId});
+      var response =
+      await http.get(url, headers: {'Authorization': Authorization_key2});
+      if(response.statusCode == 200) {
+        final jsonResponse= json.decode(response.body);
+        return MoviesDetails.fromJson(jsonResponse);
+
+      }else{ throw Exception('Failed to load movies');
+      }
+    }catch (e) {
+      print('Error in search API: $e');
+      rethrow;
+    }
+  }
+
 
   /////Search
   static Future<SearchResponse> search(String query) async {

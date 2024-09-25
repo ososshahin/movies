@@ -2,7 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:movies_app/api/model/Movie.dart';
-import '../features/home_screen/movies_details/movies_details.dart';
+import '../features/home_screen/movies_details/moviesDetailsScreen.dart';
 import 'ImportantUrl.dart';
 
 class MovieWidget extends StatelessWidget {
@@ -40,7 +40,7 @@ class MovieWidget extends StatelessWidget {
       children: [
        InkWell(
          onTap: (){
-           Navigator.pushNamed(context, MoviesDetails.routeName);
+           Navigator.pushNamed(context, MoviesDetailsScreen.routeName);
          },
          child: CachedNetworkImage(imageUrl:ImportantUrl().BaseImageUrl+movie!.posterPath!,
          height: imageHeight?.h,),

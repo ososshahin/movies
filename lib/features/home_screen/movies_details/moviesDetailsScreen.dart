@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-class MoviesDetails extends StatelessWidget
+class MoviesDetailsScreen extends StatelessWidget
 {
   static const String routeName = 'details';
 
-  const MoviesDetails({super.key});
+  const MoviesDetailsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
