@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:movies_app/api/model/MoviesListResponse.dart';
+import 'package:movies_app/api/model/Genres.dart'; // Import the Genres model
 import 'package:movies_app/features/categories_screen/movies_screen.dart';
+import 'package:movies_app/api/ApiManager.dart';
 
-class CategoryScreen extends StatefulWidget
-{
+class CategoryScreen extends StatefulWidget {
   static const String routeName = 'category_screen';
   const CategoryScreen({super.key});
 
@@ -12,74 +13,95 @@ class CategoryScreen extends StatefulWidget
 }
 
 class _CategoryScreenState extends State<CategoryScreen> {
-  List<dynamic> genres = [];
+  List<Genres> genres = [];
   bool isLoading = true;
+
   @override
   void initState() {
     super.initState();
-    MoviesListResponse();
+    fetchGenres();
   }
-  void navigateToMovies(String genreId){
 
-  Navigator.push(context,
-  MaterialPageRoute(builder: (context) => MoviesScreen(genreId:genreId),),);
-}
+  Future<void> fetchGenres() async {
+    try {
+      MoviesListResponse response = await ApiManager.getMoviesList(); // No need to pass Id and name
 
-@override
+      setState(() {
+        genres = response.genres ?? [];
+        isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        isLoading = false;
+      });
+      print('Error fetching genres: $e');
+    }
+  }
+
+  void navigateToMovies(String genreId) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => MoviesScreen(genreId: genreId)),
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Padding(
-        padding:const EdgeInsets.all(16.0),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text("Browse Category",
-        style: TextStyle(fontSize: 22,color: Colors.white,
-        fontWeight: FontWeight.bold),),
-            Expanded(
-              child:isLoading?Center(child: CircularProgressIndicator(),)
-                    :GridView.builder(
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                  childAspectRatio: 1,
-                  mainAxisSpacing: 16.0,
-                  crossAxisSpacing: 16.0,),
-                  itemCount: genres.length,
-                  itemBuilder: (context, index) {
-                    return GestureDetector(
-                      onTap: () {
-                        navigateToMovies(genres[index]['id']);
-                      },
-
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8.0),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black26,
-                            blurRadius: 6.0,
-                            offset: Offset(0, 2),
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            "Browse Category",
+            style: TextStyle(fontSize: 22, color: Colors.white, fontWeight: FontWeight.bold),
+          ),
+          Expanded(
+            child: isLoading
+                ? Center(child: CircularProgressIndicator(color: Colors.white))
+                : GridView.builder(
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                childAspectRatio: 1,
+                mainAxisSpacing: 16.0,
+                crossAxisSpacing: 16.0,
+              ),
+              itemCount: genres.length,
+              itemBuilder: (context, index) {
+                return GestureDetector(
+                  onTap: () {
+                    navigateToMovies(genres[index].id.toString()); // Use genre ID here
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8.0),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black26,
+                          blurRadius: 6.0,
+                          offset: Offset(0, 2),
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      children: [
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(8.0),
+                          child: Image.asset(
+                            "assets/images/cinema.jpg",
+                            fit: BoxFit.cover,
                           ),
-                        ]
-                      ),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(8.0),
-                        child: Image.asset("assets/images/cinema.jpg",
-                          fit: BoxFit.cover,),
-
-                      ),
-                      ),
-                    );
-                      },
-                      ),
-
-
-
-
-
+                        ),
+                        Text( genres[index].name ?? "", style: TextStyle(color: Colors.white),),
+                      ],
+                    ),
                   ),
-  ],
+                );
+              },
             ),
-  );
-
+          ),
+        ],
+      ),
+    );
   }
 }

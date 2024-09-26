@@ -56,44 +56,41 @@ class ApiManager {
     var recommended = RecommendedMoviesResponse.fromJson(json);
     return recommended;
   }
-  static Future<MoviesListResponse> getMoviesList(String Id,String name) async{
-    var params = {
-      "Id":Id,
-      "Name":name
 
-    };
-    try{
-    var url = Uri.https(BASE_URl,Endpoints.moviesList,params);
-    var response =
-        await http.get(url, headers: {'Authorization': Authorization_key2});
-    if(response.statusCode == 200) {
-      var json = jsonDecode(response.body);
-      var moviesList = MoviesListResponse.fromJson(json);
-      return moviesList;
-    }else{ throw Exception('Failed to load movies');
-    }
-    }catch (e) {
-      print('Error in search API: $e');
-      rethrow;
-    }
-  }
-  static Future<MoviesDetails> getMoviesDetails(String genreId) async{
-    try{
-      var url = Uri.https(BASE_URl,Endpoints.moviesDetails,{'Id':genreId});
-      var response =
-      await http.get(url, headers: {'Authorization': Authorization_key2});
-      if(response.statusCode == 200) {
-        final jsonResponse= json.decode(response.body);
-        return MoviesDetails.fromJson(jsonResponse);
+  static Future<MoviesListResponse> getMoviesList() async {
+    try {
+      // Correctly build the URL with scheme
+      var url = Uri.https(BASE_URl, Endpoints.moviesList);
+      var response = await http.get(url, headers: {'Authorization': Authorization_Key});
 
-      }else{ throw Exception('Failed to load movies');
+      if (response.statusCode == 200) {
+        var json = jsonDecode(response.body);
+        var moviesList = MoviesListResponse.fromJson(json);
+        return moviesList;
+      } else {
+        throw Exception('Failed to load movies');
       }
-    }catch (e) {
-      print('Error in search API: $e');
+    } catch (e) {
+      print('Error in MoviesList API: $e');
       rethrow;
     }
   }
 
+  static Future<MoviesDetails> getMoviesDetails(String genreId) async {
+    try {
+      var url = Uri.https(BASE_URl, Endpoints.moviesDetails, {'with_genres': genreId}); // Change 'Id' to 'with_genres'
+      var response = await http.get(url, headers: {'Authorization': Authorization_Key});
+      if (response.statusCode == 200) {
+        final jsonResponse = json.decode(response.body);
+        return MoviesDetails.fromJson(jsonResponse);
+      } else {
+        throw Exception('Failed to load movies: ${response.statusCode} ${response.body}');
+      }
+    } catch (e) {
+      print('Error in search API: $e');
+      rethrow;
+    }
+  }
 
   /////Search
   static Future<SearchResponse> search(String query) async {

@@ -13,6 +13,7 @@ class WatchListCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      color: Colors.transparent,
       child: ListTile(
         leading: Image.asset(imagePath,width: 50,fit: BoxFit.cover,),
         title: Text(title),
