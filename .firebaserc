@@ -1,0 +1,9 @@
+{
+  "projects": {
+    "default": "moviesapp-87bb0",
+    "firebase apps:create android": "moviesapp-87bb0"
+  },
+  "targets": {},
+  "etags": {},
+  "dataconnectEmulatorConfig": {}
+}
