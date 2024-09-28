@@ -1,26 +1,44 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:movies_app/DateUtils.dart';
+import 'package:movies_app/api/model/Movie.dart';
+import 'package:movies_app/common/DetailsMovieWidget.dart';
+import 'package:movies_app/common/ImportantUrl.dart';
+import 'package:movies_app/common/MovieWidget.dart';
+import 'package:movies_app/core/theming/colors.dart';
+
+import '../../core/theming/text_style.dart';
 class WatchListCard extends StatelessWidget {
-  final String title;
-  final String year;
-  final String actors;
-  final String imagePath;
+
+  Movie movie;
   
-  const WatchListCard({required this.title,
-  required this.year,
-  required this.actors,
-  required this.imagePath});
+   WatchListCard({
+  required this.movie});
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      color: Colors.transparent,
-      child: ListTile(
-        leading: Image.asset(imagePath,width: 50,fit: BoxFit.cover,),
-        title: Text(title),
-        subtitle: Text('$year\n$actors'),
-        isThreeLine: true,
-        trailing: Icon(Icons.check_circle,color: Colors.amber,),
-      ),
+    return Row(
+      children: [
+        Expanded(child: Padding(
+          padding: EdgeInsets.symmetric(vertical: 8.0),
+          child: MovieWidget( movie: movie, imageHeight: 120,
+            addIconSize: 18,addIconBottomPadding: 85, addIconRightPadding: 92,
+          bookMarkIconRightPadding: 105,),
+        )),
+        Expanded(child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('${movie.title}',style: TextStyle(
+              color: Colors.white
+            ),),
+            Text('${movie.releaseDate?.formatDate()}',
+              style: TextStyleApp.font14weight400colorWhite.copyWith(color:Colors.white.withOpacity(.67)))
+          ],
+        ),
+          flex: 2,
+        )
+      ],
     );
   }
 }

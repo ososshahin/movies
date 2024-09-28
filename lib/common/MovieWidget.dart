@@ -1,11 +1,15 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:movies_app/AppUtils.dart';
 import 'package:movies_app/api/model/Movie.dart';
+import 'package:movies_app/core/theming/colors.dart';
+import 'package:movies_app/features/watch_list_screen/watch_list.dart';
+import 'package:movies_app/firebase/MovieCollection.dart';
 import '../features/home_screen/movies_details/moviesDetailsScreen.dart';
 import 'ImportantUrl.dart';
 
-class MovieWidget extends StatelessWidget {
+class MovieWidget extends StatefulWidget {
   Movie? movie;
   int? imageHeight;
   double? bookMarkIconSize;
@@ -35,6 +39,11 @@ class MovieWidget extends StatelessWidget {
     this.actors,});
 
   @override
+  State<MovieWidget> createState() => _MovieWidgetState();
+}
+
+class _MovieWidgetState extends State<MovieWidget> {
+  @override
   Widget build(BuildContext context) {
     return  Stack(
       children: [
@@ -42,32 +51,50 @@ class MovieWidget extends StatelessWidget {
          onTap: (){
            Navigator.pushNamed(context, MoviesDetailsScreen.routeName);
          },
-         child: CachedNetworkImage(imageUrl:ImportantUrl().BaseImageUrl+movie!.posterPath!,
-         height: imageHeight?.h,),
+         child: CachedNetworkImage(imageUrl:ImportantUrl().BaseImageUrl+widget.movie!.posterPath!,
+         height: widget.imageHeight?.h,),
        ) ,
         Positioned(
-          bottom:bookMarkIconBottomPadding?.h ,
-          right: bookMarkIconRightPadding?.w ,
+          bottom:widget.bookMarkIconBottomPadding?.h ,
+          right: widget.bookMarkIconRightPadding?.w ,
           child: Opacity(
             opacity: 1,
             child: ImageIcon(
-                size: bookMarkIconSize,
-                color: const Color(0xff514F4F),
+                size: widget.bookMarkIconSize,
+                color:  widget.movie!.watchLater!? AppColors.yellow1:
+                Color(0xff514F4F)
+                ,
                 const AssetImage(
                   'assets/images/Icon awesome-bookmark.png',
                 )),
           ),
         ),
         Positioned(
-          bottom: addIconBottomPadding?.h,
-          right: addIconRightPadding?.w,
-          child: IconButton(onPressed: () {
-
-          }, icon: Icon( Icons.add,size: addIconSize,),
-            color: Colors.white,),
-        )
+          bottom: widget.addIconBottomPadding?.h,
+          right: widget.addIconRightPadding?.w,
+          child: IconButton(onPressed:widget.movie!.watchLater!?null:() {
+           AddmovietoWatchlaterList();
+          }, icon: widget.movie!.watchLater!?Icon(Icons.check,size: widget.addIconSize,
+            color: Colors.white,):Icon(Icons.add, color: Colors.white,size: widget.addIconSize,)
+        ))
       ],
     );
   }
+  AddmovietoWatchlaterList()async{
+    try{
+      showLoadingdialog(context);
+     await AddmovietoWatchList(widget.movie!);
+     await UpdateMovie(widget.movie!);
+    hideLoadingdialog(context);
+    widget.movie?.watchLater = true;
+    setState(() {
 
+    });
+  }catch(e){
+      showMessageDialog(context,  () {
+        AddmovietoWatchlaterList();
+      },);
+
+    }
+  }
 }
